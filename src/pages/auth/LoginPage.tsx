@@ -405,22 +405,6 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Divider */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '18px 0' }}>
-              <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-              <span style={{ fontSize: 12, color: 'var(--text-3)' }}>o continuá con</span>
-              <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-            </div>
-
-            {/* Social buttons */}
-            <div style={{ display: 'flex', gap: 10 }}>
-              <Button variant="secondary" style={{ flex: 1, justifyContent: 'center' }}>
-                Google
-              </Button>
-              <Button variant="secondary" style={{ flex: 1, justifyContent: 'center' }}>
-                Microsoft
-              </Button>
-            </div>
 
             {/* Demo hint */}
             <div style={{
