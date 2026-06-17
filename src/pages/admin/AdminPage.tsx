@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Segmented, Button, Sparkline, Avatar } from '../../components/ui';
+import { Card, Segmented, Button, Sparkline, Avatar, ThemeToggle } from '../../components/ui';
 import { logout } from '../../services/auth';
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
@@ -712,6 +712,11 @@ function AdminSidebar({ tab, setTab, onLogout, email }: {
 
       <div style={{ flex: 1 }} />
 
+      {/* Theme toggle */}
+      <div style={{ padding: '4px 4px 8px' }}>
+        <ThemeToggle />
+      </div>
+
       {/* Profile */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 8, borderRadius: 'var(--r-md)' }}>
         <Avatar name={email} size={34} color="var(--accent)" />
@@ -756,7 +761,7 @@ export default function AdminPage() {
       <style>{`
         @media (max-width: 900px) {
           .adm-sidebar { display: none !important; }
-          .adm-mobile-tabs { display: block !important; }
+          .adm-mobile-tabs { display: flex !important; }
         }
       `}</style>
 
@@ -765,11 +770,12 @@ export default function AdminPage() {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Mobile tab switcher */}
-          <div className="adm-mobile-tabs" style={{ display: 'none', padding: '14px 16px 0', borderBottom: '1px solid var(--border)' }}>
+          <div className="adm-mobile-tabs" style={{ display: 'none', padding: '12px 16px', borderBottom: '1px solid var(--border)', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <Segmented value={tab} onChange={setTab} options={[
               { value: 'clients',  label: 'Clientes', icon: <Icon name="building" size={14} /> },
               { value: 'payments', label: 'Pagos',    icon: <Icon name="card" size={14} /> },
             ]} />
+            <ThemeToggle />
           </div>
 
           <div style={{ padding: 24, maxWidth: 1180, margin: '0 auto' }}>
