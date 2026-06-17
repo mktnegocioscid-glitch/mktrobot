@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Segmented, Button, Sparkline, Avatar, ThemeToggle } from '../../components/ui';
 import { logout } from '../../services/auth';
+import { useAuthStore } from '../../store/authStore';
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 function Icon({ name, size = 18, stroke = 2, style }: {
@@ -345,10 +346,11 @@ function RevenueChart({ series, splitIndex, labels, h = 210 }: {
 }
 
 // ── Clients panel ─────────────────────────────────────────────────────────────
-function ClientsPanel({ clients, onAdd, onDelete }: {
+function ClientsPanel({ clients, onAdd, onDelete, onImpersonate }: {
   clients: Client[];
   onAdd: (c: Client) => void;
   onDelete: (id: string) => void;
+  onImpersonate: (c: Client) => void;
 }) {
   const [q,         setQ]         = useState('');
   const [filter,    setFilter]    = useState('all');
@@ -480,7 +482,7 @@ function ClientsPanel({ clients, onAdd, onDelete }: {
             {/* Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'flex-end' }}>
               <Button size="sm" variant="secondary" iconend={<Icon name="arrowR" size={14} />}
-                onClick={e => { e.stopPropagation(); }}
+                onClick={e => { e.stopPropagation(); onImpersonate(c); }}
               >
                 Abrir
               </Button>
@@ -749,6 +751,12 @@ export default function AdminPage() {
   const navigate = useNavigate();
   const [tab,     setTab]     = useState('clients');
   const [clients, setClients] = useState<Client[]>(MOCK_CLIENTS);
+  const startImpersonation = useAuthStore(s => s.startImpersonation);
+
+  function handleImpersonate(c: Client) {
+    startImpersonation(c.id, c.name, '');
+    navigate('/app/dashboard');
+  }
   
 
   async function handleLogout() {
@@ -784,6 +792,7 @@ export default function AdminPage() {
                 clients={clients}
                 onAdd={c => setClients(list => [...list, c])}
                 onDelete={id => setClients(list => list.filter(c => c.id !== id))}
+                onImpersonate={handleImpersonate}
               />
             ) : (
               <PaymentsPanel clients={clients} />

@@ -227,27 +227,37 @@ function Sidebar({ mobileOpen, onClose, unreadCount = 0 }: SidebarProps) {
         }}
       >
         {/* Workspace chip */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '8px',
-          borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
-          background: 'var(--surface-2)', marginBottom: 8,
-        }}>
-          <div style={{
-            width: 34, height: 34, borderRadius: 9,
-            background: '#10B3AC', color: '#fff',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 800, fontSize: 13, flexShrink: 0,
-          }}>
-            DI
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13.5, fontWeight: 700, letterSpacing: '-.01em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              Dr. Imports
+        {/* Workspace chip — shows impersonated tenant if admin is viewing a client */}
+        {(() => {
+          const imp = useAuthStore(s => s.impersonating);
+          const tenantName = imp?.tenantName ?? 'Dr. Imports';
+          const initials = tenantName.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2);
+          return (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '8px',
+              borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
+              background: imp ? 'var(--accent-soft)' : 'var(--surface-2)', marginBottom: 8,
+            }}>
+              <div style={{
+                width: 34, height: 34, borderRadius: 9,
+                background: imp ? 'var(--accent)' : '#10B3AC', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 800, fontSize: 13, flexShrink: 0,
+              }}>
+                {initials}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 700, letterSpacing: '-.01em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {tenantName}
+                </div>
+                <div style={{ fontSize: 11, color: imp ? 'var(--accent-2)' : 'var(--text-3)' }}>
+                  {imp ? 'Vista admin' : `Plan ${plan}`}
+                </div>
+              </div>
+              <Icon name="chevDown" size={15} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-3)' }}>Plan {plan}</div>
-          </div>
-          <Icon name="chevDown" size={15} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
-        </div>
+          );
+        })()}
 
         <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', color: 'var(--text-3)', padding: '6px 12px 2px' }}>
           PLATAFORMA
